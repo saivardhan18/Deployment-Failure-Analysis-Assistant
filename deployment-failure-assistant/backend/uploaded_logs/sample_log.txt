@@ -1,0 +1,4 @@
+ERROR: failed to connect to service X
+Traceback (most recent call last):
+  File "app.py", line 42, in <module>
+RuntimeError: boom

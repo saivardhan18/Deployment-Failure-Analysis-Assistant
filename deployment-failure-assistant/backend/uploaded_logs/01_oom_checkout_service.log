@@ -1,0 +1,34 @@
+Pipeline 'deploy-checkout-service' Build #891
+Started by user: ci-bot
+Running on agent: k8s-prod-agent-3
+
+[Stage: Build]
++ docker build -t checkout-service:891 .
+Successfully built a3f9c21d
+Successfully tagged checkout-service:891
+
+[Stage: Deploy to Production]
++ kubectl set image deployment/checkout-service checkout-service=checkout-service:891
+deployment.apps/checkout-service image updated
++ kubectl rollout status deployment/checkout-service --timeout=300s
+Waiting for deployment "checkout-service" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "checkout-service" rollout to finish: 1 out of 3 new replicas have been updated...
+error: timed out waiting for the condition
+
++ kubectl get pods -l app=checkout-service
+NAME                                 READY   STATUS      RESTARTS   AGE
+checkout-service-7d4f9b6c4-xk2pq    0/1     OOMKilled   4          6m
+checkout-service-7d4f9b6c4-lm9wr    0/1     OOMKilled   4          6m
+checkout-service-7d4f9b6c4-rt5vn    0/1     OOMKilled   3          5m
+
++ kubectl describe pod checkout-service-7d4f9b6c4-xk2pq
+Limits:
+  memory: 256Mi
+Requests:
+  memory: 128Mi
+Events:
+  Warning  OOMKilling   Container checkout-service exceeded its memory limit of 256Mi, got killed
+  Warning  BackOff      Back-off restarting failed container
+  Normal   Pulled       Successfully pulled image in 3.2s
+
+Finished: FAILURE

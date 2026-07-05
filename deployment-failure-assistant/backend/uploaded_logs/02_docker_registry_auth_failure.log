@@ -1,0 +1,40 @@
+Pipeline 'build-and-push-api-gateway' Build #204
+Started by user: Jenkins Admin
+Agent: docker-agent-02
+
+[Stage: Checkout]
+Cloning repository https://github.com/company/api-gateway.git
+Branch: main
+Commit: f3a9d2b
+
+[Stage: Build Docker Image]
++ docker build -t registry.company.internal/api-gateway:204 .
+Sending build context to Docker daemon  48.3MB
+Step 1/12 : FROM node:18-alpine
+Step 2/12 : WORKDIR /app
+Step 3/12 : COPY package*.json ./
+Step 4/12 : RUN npm ci
+Successfully built 9c3f2e1a
+Successfully tagged registry.company.internal/api-gateway:204
+
+[Stage: Push to Registry]
++ docker push registry.company.internal/api-gateway:204
+The push refers to repository [registry.company.internal/api-gateway]
+Preparing layers...
+error: unauthorized: authentication required
+Error response from daemon: Get "https://registry.company.internal/v2/": unauthorized: authentication required
+
+Retrying push (attempt 1/3)...
+error: unauthorized: authentication required
+
+Retrying push (attempt 2/3)...
+error: unauthorized: authentication required
+
+Retrying push (attempt 3/3)...
+error: unauthorized: authentication required
+
+FATAL: All push attempts failed
+The Docker registry credentials may have expired. Please rotate the registry secret.
+jenkins credential 'docker-registry-prod' may be invalid or expired.
+
+Finished: FAILURE
